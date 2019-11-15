@@ -4,15 +4,20 @@ import asyncio
 
 
 async def handle_echo(reader, writer):
-    data = await reader.read(100)
-    message = data.decode()
-    addr = writer.get_extra_info('peername')
+    client_alive = True
+    while client_alive:
+        data = await reader.read(100)
+        message = data.decode()
+        if message:
+            addr = writer.get_extra_info('peername')
 
-    print(f'Received {message!r} from {addr!r}')
+            print(f'Received {message!r} from {addr!r}')
 
-    print(f'Send: {message!r}')
-    writer.write(data)
-    await writer.drain()
+            print(f'Send: {message!r}')
+            writer.write(data)
+            await writer.drain()
+        else:
+            client_alive = False
 
     print('Close the connection')
     writer.close()
