@@ -1,0 +1,24 @@
+# Python compiled
+*.py[cod]
+
+# Packages
+*.egg
+*.egg-info
+
+# Installer logs
+pip-log.txt
+
+# Translations
+*.mo
+
+# Development
+.mr.developer.cfg
+.project
+.pydevproject
+*.nja
+*.geany
+.idea
+*.bak
+
+# virtualenv
+venv/
