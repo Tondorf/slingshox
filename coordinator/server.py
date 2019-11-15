@@ -3,7 +3,7 @@
 import asyncio
 
 
-async def handle_echo(reader, writer):
+async def handle_client(reader, writer):
     client_alive = True
     while client_alive:
         data = await reader.read(100)
@@ -24,7 +24,7 @@ async def handle_echo(reader, writer):
 
 
 async def main():
-    server = await asyncio.start_server(handle_echo, '127.0.0.1', 8888)
+    server = await asyncio.start_server(handle_client, '127.0.0.1', 8888)
 
     addr = server.sockets[0].getsockname()
     print(f'Serving on {addr}')
