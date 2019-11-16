@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from tcpserver import TCPServer
+from server import GameServer
 
 if __name__ == '__main__':
-    server = TCPServer('127.0.0.1', 8888)
+    server = GameServer('127.0.0.1', 8888)
     server.start()
