@@ -64,7 +64,7 @@ class World(object):
 	def visualize(self):
 		return self.visualizer.visualize()
 
-	async def incoming_message(self, new_msg):
+	def incoming_message(self, new_msg):
 		if not self.inited:
 			self.pID = new_msg
 			self.inited = True
