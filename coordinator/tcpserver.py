@@ -3,6 +3,7 @@
 import asyncio
 import hashlib
 import time
+import json
 
 
 class TCPServer:
@@ -57,7 +58,8 @@ class TCPServer:
             data = await reader.readline()
             if data:
                 msg = data.decode().rstrip()
-                self._on_client_message(msg)
+                obj = json.loads(msg)
+                self._on_client_message(obj, obj['client_id'])
             else:
                 return
 
