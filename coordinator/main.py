@@ -4,4 +4,5 @@ from server import GameServer
 
 if __name__ == '__main__':
     server = GameServer('127.0.0.1', 8888)
-    server.start()
+    fps = 1.
+    server.start(fps)

@@ -1,5 +1,7 @@
 import asyncio
 import hashlib
+import time
+
 
 class TCPServer:
     def __init__(self, host, port):
@@ -8,7 +10,9 @@ class TCPServer:
         self._loop = asyncio.get_event_loop()
         self._stopping = False
 
-    def start(self):
+    def start(self, fps):
+        self.fps = fps
+
         coro = asyncio.start_server(self._handle_client, self.host, self.port)
         server = self._loop.run_until_complete(coro)
 
@@ -55,7 +59,12 @@ class TCPServer:
 
     async def _producer_handler(self, writer):
         while not self._stopping:
+            t1 = time.time()
             for msg in self._generate_broadcast_messages():
                 writer.write((msg + '\n').encode())
                 await writer.drain()
-            await asyncio.sleep(1.)
+
+            t2 = time.time()
+            dt = t2 - t1
+            sleep_time = 1. / self.fps - dt
+            await asyncio.sleep(max(sleep_time, 0.))
