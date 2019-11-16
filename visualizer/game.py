@@ -4,28 +4,32 @@
 from mode import Mode
 from cozypygame import *
 from definitions import *
+from network import Client
 
 
 class GameMode(Mode):
 
 	def __init__(self, world):
+		print("Called INGAME CHALLENGE MODE ctor")
 		super(GameMode, self).__init__(world)
 
-		self.smallResultFont = pygame.font.Font("fonts/ARCADE_N.TTF", 24)
-		self.bigResultFont = pygame.font.Font("fonts/ARCADE_N.TTF", 80)
-		print("Called INGAME CHALLENGE MODE ctor")
+		self.font = pygame.font.Font("fonts/ARCADE_N.TTF", 24)
 
 		self.surf = pygame.Surface((dispXXX, dispYYY))
-		self.canvas = load_image_cached("image/background.png")
 
-		# joystick control memory. this doesn't really belong here, but whatevs
-		self.joy_dir = 0
+		self.network = Client()
 
 	def activate(self):  # called after fading in and finished
-		pass
+		self.network.connect()
 
 	def input(self, menu_events, game_events):
-		pass
+		# EvAct = enum('Up', 'Down', 'Left', 'Right', 'Submit', 'Exit', 'Pause')
+		# -1 = left, 0 = nothing, +1 = right
+		events = [g.dir for g in game_events]
+		direction = int(EvAct.Right in events) - int(EvAct.Left in events)
+		thrust = int(EvAct.Submit in events)
+		cmds = {'direction': direction, 'thrust': thrust}
+		self.network.send_cmds(cmds)
 
 	def tick(self):
 		pass

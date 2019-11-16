@@ -27,7 +27,7 @@ class GameEvent:
 
 	def __init__(self, p: int, d: EvAct):
 		self.player = p  # 1-4
-		self.dir = d  # Left,Right
+		self.dir = d  # Left,Right,Submit,...
 
 	def __str__(self):
 		return "GameEvent<%d,%s>" % (self.player, self.dir)
