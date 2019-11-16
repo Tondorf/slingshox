@@ -27,7 +27,7 @@ class GameServer(TCPServer):
                 'vx': .2,
                 'vy': 0.,
                 'm': .001,
-                'r': 1.,
+                'r': .273,
             },
         }
 
