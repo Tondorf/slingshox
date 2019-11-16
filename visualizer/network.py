@@ -1,7 +1,7 @@
 # -*- coding: utf-8 *-*
 
-import json
 import asyncio
+import json
 
 PORT = 8888
 
@@ -32,7 +32,7 @@ class Client:
 		self.writer.close()
 
 	async def send_cmds(self, cmds):
-		dat = json.dumps({"cmds": cmds}).encode("ascii")
+		dat = json.dumps({"cmds": cmds}).encode()
 		#self.sock.send(dat)
 		await self.writer.writelines(dat)
 		print('cmds sent', dat)
