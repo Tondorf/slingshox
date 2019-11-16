@@ -18,8 +18,8 @@ class GameServer(TCPServer):
                 'y': 0.,
                 'vx': 0.,
                 'vy': 0.,
-                'tx': [],
-                'ty': [],
+                'tx': None,
+                'ty': None,
                 'm': 1.,
                 'r': 1.,
             },
@@ -53,8 +53,10 @@ class GameServer(TCPServer):
         ms = [self._world[p]['m'] for p in ['earth', 'moon']]
         dt = .01
 
+        txs = []
         for _ in range(100):
             xs, vs, self._forces, _, _ = physics.integrate(xs, vs, self._forces, ms, dt)
+            txs.append(xs)
 
         for i, p in enumerate(planets):
             x, y = xs[i]
@@ -66,16 +68,14 @@ class GameServer(TCPServer):
             self._world[p]['vy'] = vy
 
         fs = self._forces
-        txs = []
         for i in range(1000):
             xs, vs, fs, _, _ = physics.integrate(xs, vs, fs, ms, dt)
             if i % 10 == 0:
                 txs.append(xs)
 
         for i, p in enumerate(planets):
-            tx, ty = txs[i]
-            self._world[p]['tx'] = tx
-            self._world[p]['ty'] = ty
+            self._world[p]['tx'] = np.array([t[i][0] for t in txs])
+            self._world[p]['ty'] = np.array([t[i][0] for t in txs])
 
     def _generate_broadcast_messages(self):
         self._update_world()
@@ -84,6 +84,8 @@ class GameServer(TCPServer):
                 'x': self._world[p]['x'] / 100. + .5,
                 'y': self._world[p]['y'] / 100. + .2,
                 'r': self._world[p]['r'] / 100.,
+                'tx': (self._world[p]['tx'] / 100. + .5).tolist(),
+                'ty': (self._world[p]['ty'] / 100. + .2).tolist(),
             } for p in ['earth', 'moon']
         }
         return [json.dumps(serialized_world), ]
