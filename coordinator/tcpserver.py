@@ -71,4 +71,4 @@ class TCPServer:
             t2 = time.time()
             dt = t2 - t1
             sleep_time = 1. / self.fps - dt
-            await asyncio.sleep(max(sleep_time, 0.))
+            await asyncio.sleep(max(sleep_time, 0.), loop=self._loop)
