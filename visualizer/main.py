@@ -5,7 +5,6 @@ import sys
 
 from cozypygame import *
 from definitions import *
-
 from mode import Modes
 from world import World
 from controls import EventProcessor
@@ -15,11 +14,11 @@ pygame.mixer.pre_init(44100, -16, 2, 1024)
 pygame.init()
 pygame.joystick.init()
 pygame.display.set_caption('')
-print(XXX, dispYYY)
+print(dispXXX, dispYYY)
 if not FULLSCREEN:
-	display = pygame.display.set_mode((XXX, dispYYY))
+	display = pygame.display.set_mode((dispXXX, dispYYY))
 else:
-	display = pygame.display.set_mode((XXX, dispYYY), pygame.FULLSCREEN)
+	display = pygame.display.set_mode((dispXXX, dispYYY), pygame.FULLSCREEN)
 fpsClock = pygame.time.Clock()
 tick = 0
 
@@ -28,7 +27,7 @@ if FULLSCREEN:
 pygame.event.set_blocked(pygame.MOUSEMOTION)
 
 # initialize all the shit
-world = World(Modes.Intro)
+world = World(Modes.Game)
 
 ep = EventProcessor()
 world.ep = ep
