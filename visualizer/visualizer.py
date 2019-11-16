@@ -24,7 +24,7 @@ class Visualizer:
 			if self.world.moon is not None:
 				self.vis_moon(self.world.moon)
 			for pID, player in self.world.players.items():
-				self.vis_ship(player, pID == self.world.pID)
+				self.vis_player(player, pID == self.world.pID)
 			self.vis_footer()
 
 		return self.surf
@@ -35,9 +35,11 @@ class Visualizer:
 	def vis_moon(self, moon):
 		pygame.draw.circle(self.surf, (200, 200, 200), (int(moon.x * XXX), int(moon.y * YYY)), int(moon.r*XXX))
 
-	def vis_ship(self, ship, me=False):
+	def vis_player(self, player, me=False):
 		color = (255, 255, 0) if me else (0, 255, 0)
-		pygame.draw.circle(self.surf, color, (int(ship.pos.x * XXX), int(ship.pos.y * YYY)), 10)
+		pygame.draw.circle(self.surf, color, (int(player.pos.x * XXX), int(player.pos.y * YYY)), 10)
+		for (x, y) in player.tra:
+			pygame.draw.circle(self.surf, color, (int(x * XXX), int(y * YYY)), 3)
 
 	def vis_bomb(self, bomb):
 		pygame.draw.circle(self.surf, (255, 0, 0), (int(bomb.pos.x * XXX), int(bomb.pos.y * YYY)), 10)
