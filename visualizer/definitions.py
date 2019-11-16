@@ -7,6 +7,11 @@ from cozypygame import enum
 FULLSCREEN = 0
 DEVEL = 1
 
+
+XXX = 1000
+YYY = XXX // 2
+dispYYY = int(YYY * (9/8))
+
 FPS = 30
 
 EvAct = enum('Up', 'Down', 'Left', 'Right', 'Submit', 'Exit', 'Pause')

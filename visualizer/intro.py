@@ -3,6 +3,7 @@
 
 from mode import Mode, Modes
 from cozypygame import *
+from definitions import *
 
 
 class IntroMode(Mode):
@@ -11,8 +12,8 @@ class IntroMode(Mode):
 		super(IntroMode, self).__init__(world)
 
 		print("Called INTRO MODE ctor")
-		self.timeout = 30
-		self.surf = pygame.Surface((640, 480))
+		self.timeout = 7.5
+		self.surf = pygame.Surface((XXX, dispYYY))
 		self.font = pygame.font.SysFont("Consolas", 20)
 		draw_text(self.surf, "Intro", self.font, (320,240), (255,0,0))
 
