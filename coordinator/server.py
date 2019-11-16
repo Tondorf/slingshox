@@ -11,6 +11,7 @@ class GameServer(TCPServer):
         super(GameServer, self).__init__(host, port, fps)
         self.players = set()
 
+        self._forces = None
         self.world = {
             'earth': {
                 'x': .8,
@@ -28,15 +29,6 @@ class GameServer(TCPServer):
                 'm': .001,
                 'r': .01,
             },
-#            self.players[0]: {
-#                'x': .5,
-#                'y': .5,
-#                'vx': .1,
-#                'vy': -.1,
-#                'phi': .3,
-#                'tx': [.55, .6, .65],
-#                'ty': [.45, .4, .35],
-#            }
         }
 
     def _on_new_client(self, client_id):
@@ -56,9 +48,8 @@ class GameServer(TCPServer):
         xs = [np.array([self.world[p]['x'], self.world[p]['y']]) for p in planets]
         vs = [np.array([self.world[p]['vx'], self.world[p]['vy']]) for p in planets]
         ms = [self.world[p]['m'] for p in ['earth', 'moon']]
-        fs = None  # TODO save fs for next update
         dt = 1
-        xs, ys, fs, ms, dt = physics.integrate(xs, vs, fs, ms, dt)
+        xs, ys, self._forces, ms, dt = physics.integrate(xs, vs, self._forces, ms, dt)
 
         for i, p in enumerate(planets):
             x, y = xs[i]
