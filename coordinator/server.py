@@ -18,8 +18,6 @@ class GameServer(TCPServer):
                 'y': 0.,
                 'vx': 0.,
                 'vy': 0.,
-                'tx': None,
-                'ty': None,
                 'm': 1.,
                 'r': 1.,
             },
@@ -28,8 +26,6 @@ class GameServer(TCPServer):
                 'y': 60.,
                 'vx': .2,
                 'vy': 0.,
-                'tx': [],
-                'ty': [],
                 'm': .001,
                 'r': 1.,
             },
@@ -75,7 +71,7 @@ class GameServer(TCPServer):
 
         for i, p in enumerate(planets):
             self._world[p]['tx'] = np.array([t[i][0] for t in txs])
-            self._world[p]['ty'] = np.array([t[i][0] for t in txs])
+            self._world[p]['ty'] = np.array([t[i][1] for t in txs])
 
     def _generate_broadcast_messages(self):
         self._update_world()
