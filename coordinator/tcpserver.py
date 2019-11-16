@@ -2,8 +2,8 @@
 
 import asyncio
 import hashlib
-import time
 import json
+import time
 
 
 class TCPServer:
@@ -43,7 +43,7 @@ class TCPServer:
         writer.write((client_id + '\n').encode())
         await writer.drain()
 
-        tasks = [self._consumer_handler(reader), self._producer_handler(writer)]
+        tasks = [self._consumer_handler(reader, client_id), self._producer_handler(writer)]
         done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED, loop=self._loop)
 
         self._on_leave_client(client_id)
@@ -53,13 +53,12 @@ class TCPServer:
 
         writer.close()
 
-    async def _consumer_handler(self, reader):
+    async def _consumer_handler(self, reader, client_id):
         while True:
             data = await reader.readline()
             if data:
                 msg = data.decode().rstrip()
-                obj = json.loads(msg)
-                self._on_client_message(obj, obj['client_id'])
+                self._on_client_message(json.loads(msg), client_id)
             else:
                 return
 
