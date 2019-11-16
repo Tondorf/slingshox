@@ -1,6 +1,5 @@
 import asyncio
 import hashlib
-from collections import deque
 
 class TCPServer:
     def __init__(self, host, port):
@@ -8,7 +7,6 @@ class TCPServer:
         self.port = port
         self._loop = asyncio.get_event_loop()
         self._stopping = False
-        self._broadcast_messages = deque([])
 
     def start(self):
         coro = asyncio.start_server(self._handle_client, self.host, self.port)
@@ -25,6 +23,9 @@ class TCPServer:
         raise NotImplementedError('not implemented in abstract base class')
 
     def _on_client_message(self, message, client_id):
+        raise NotImplementedError('not implemented in abstract base class')
+
+    def _generate_broadcast_messages(self):
         raise NotImplementedError('not implemented in abstract base class')
 
     async def _handle_client(self, reader, writer):
@@ -54,8 +55,7 @@ class TCPServer:
 
     async def _producer_handler(self, writer):
         while not self._stopping:
-            while self._broadcast_messages:
-                msg = self._broadcast_messages.popleft()
+            for msg in self._generate_broadcast_messages():
                 writer.write((msg + '\n').encode())
                 await writer.drain()
             await asyncio.sleep(1.)
