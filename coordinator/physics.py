@@ -21,7 +21,7 @@ def integrate(xs, vs, fs, ms, dt):
     assert len(xs) == len(vs) == len(ms)
     assert dt > 0.
 
-    if not fs:
+    if fs is None:
         fs = get_forces(xs=xs, ms=ms)
 
     next_xs = [x + v * dt + a * dt ** 2 / 2. for x, v, a in zip(xs, vs, fs)]
