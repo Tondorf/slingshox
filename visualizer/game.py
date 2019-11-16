@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 *-*
 
-import pygame
 from mode import Mode
 from cozypygame import *
 from definitions import *
 
 
-class IngameMode(Mode):
+class GameMode(Mode):
 
 	def __init__(self, world):
-		super(IngameMode, self).__init__(world)
+		super(GameMode, self).__init__(world)
 
 		self.smallResultFont = pygame.font.Font("fonts/ARCADE_N.TTF", 24)
 		self.bigResultFont = pygame.font.Font("fonts/ARCADE_N.TTF", 80)

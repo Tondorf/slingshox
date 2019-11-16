@@ -22,8 +22,8 @@ from cozypygame import enum
 
 """
 
-Modes = enum('Intro',
-             'Ingame',
+Modes = enum(
+             'Game',
              )
 
 
