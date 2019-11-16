@@ -31,13 +31,11 @@ class Visualizer:
 
 	def vis_earth(self, earth):
 		pygame.draw.circle(self.surf, (0, 0, 100), (int(earth.x * XXX), int(earth.y * YYY)), 2 * int(earth.r*XXX))
-		pygame.draw.aalines(self.surf, (0, 0, 100), False, [(x*XXX, y*YYY) for (x, y) in earth.tra])
-		# for (x, y) in earth.tra:
-		# 	pygame.draw.circle(self.surf, (0, 0, 100), (int(x * XXX), int(y * YYY)), 1)
+		# pygame.draw.lines(self.surf, (0, 0, 100), False, [(x*XXX, y*YYY) for (x, y) in earth.tra])
 
 	def vis_moon(self, moon):
 		pygame.draw.circle(self.surf, (200, 200, 200), (int(moon.x * XXX), int(moon.y * YYY)), 2 * int(moon.r*XXX))
-		pygame.draw.aalines(self.surf, (200, 200, 200), False, [(x*XXX, y*YYY) for (x, y) in moon.tra])
+		pygame.draw.lines(self.surf, (200, 200, 200), False, [(x*XXX, y*YYY) for (x, y) in moon.tra])
 		# for (x, y) in moon.tra:
 		# 	pygame.draw.circle(self.surf, (200, 200, 200), (int(x * XXX), int(y * YYY)), 1)
 
