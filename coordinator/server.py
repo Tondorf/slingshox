@@ -49,10 +49,8 @@ class GameServer(TCPServer):
         ms = [self._world[p]['m'] for p in ['earth', 'moon']]
         dt = .01
 
-        txs = []
         for _ in range(100):
             xs, vs, self._forces, _, _ = physics.integrate(xs, vs, self._forces, ms, dt)
-            txs.append(xs)
 
         for i, p in enumerate(planets):
             x, y = xs[i]
@@ -64,6 +62,11 @@ class GameServer(TCPServer):
             self._world[p]['vy'] = vy
 
         fs = self._forces
+        txs = []
+        for _ in range(100):
+            xs, vs, fs, _, _ = physics.integrate(xs, vs, fs, ms, dt)
+        txs.append(xs)
+
         for i in range(1000):
             xs, vs, fs, _, _ = physics.integrate(xs, vs, fs, ms, 20 * dt)
             if i % 2 == 0:
