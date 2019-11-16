@@ -11,10 +11,6 @@ class Client:
 		self.world = world
 		self.host = host
 
-		self.event_loop = asyncio.get_event_loop()
-		self.event_loop.run_until_complete(self.handle(self.event_loop))
-		self.event_loop.close()
-
 	async def handle(self, loop):
 		self.reader, self.writer = await asyncio.open_connection(self.host, PORT, loop=loop)
 
@@ -23,7 +19,7 @@ class Client:
 			data = await self.reader.readline()
 			if data:
 				new_message = data.decode().rstrip()
-				# print('Received:', new_message)
+				print('Received:', new_message)
 				self.world.incoming_message(new_message)
 			else:
 				running = False

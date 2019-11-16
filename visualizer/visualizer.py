@@ -2,6 +2,7 @@
 
 from cozypygame import *
 from definitions import *
+from entity import Thing
 
 
 class Visualizer:
@@ -15,7 +16,7 @@ class Visualizer:
 		self.surf = pygame.Surface((dispXXX, dispYYY))
 
 	def visualize(self):
-		self.surf.fill((0, 100, 0))
+		self.surf.fill((0, 0, 0))
 
 		if not self.world.got1stState:
 			return self.surf
@@ -24,19 +25,16 @@ class Visualizer:
 		self.vis_moon(self.world.moon)
 		for pID, player in self.world.players.items():
 			self.vis_ship(player, pID == self.world.pID)
-		# self.vis_ship(0.2, 0.2, True)
-		# self.vis_ship(0.4, 0.7)
-		# self.vis_ship(0.1, 0.9)
+		# self.vis_ship(Thing(0.2, 0.2), True)
 		self.vis_footer()
 
 		return self.surf
 
 	def vis_earth(self, earth):
-		print("vis_earth")
-		pygame.draw.circle(self.surf, (100, 100, 100), (int(earth.x * XXX), int(earth.y * YYY)), 200)
+		pygame.draw.circle(self.surf, (0, 0, 100), (int(earth.x * XXX), int(earth.y * YYY)), int(earth.r*XXX))
 
-	def vis_moon(self, earth):
-		pygame.draw.circle(self.surf, (200, 200, 200), (int(earth.x * XXX), int(earth.y * YYY)), 100)
+	def vis_moon(self, moon):
+		pygame.draw.circle(self.surf, (200, 200, 200), (int(moon.x * XXX), int(moon.y * YYY)), int(moon.r*XXX))
 
 	def vis_ship(self, ship, me=False):
 		color = (255, 0, 0) if me else (0, 0, 255)

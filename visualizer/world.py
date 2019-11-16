@@ -5,29 +5,8 @@ import json
 import pygame
 
 from definitions import *
-from network import Client
 from visualizer import Visualizer
-
-
-class Thing(pygame.math.Vector2):
-
-	def __init__(self, x, y, r):
-		super().__init__(x, y)
-		self.r = r
-
-	def __repr__(self):
-		return "Thing<%d,%d,r=%d>" % (self.x, self.y, self.r)
-
-
-class Player(Thing):
-	def __init__(self, pos, velocity, phi, trajectories):
-		super().__init__(pos.x, pos.y, 10)
-		self.vel = velocity
-		self.phi = phi
-		self.tra = trajectories
-
-	def __repr__(self):
-		return "Player<%s,%s,phi=%d,tra_count=%d>" % (super().__repr__(), self.vel, self.phi, len(self.tra))
+from entity import Thing, Player
 
 
 class World(object):
@@ -44,8 +23,6 @@ class World(object):
 		self.inited = False
 		self.pID = None
 		self.got1stState = False
-
-		self.network = Client(self)
 
 	def input(self, _menu_events, game_events):
 		# EvAct = enum('Up', 'Down', 'Left', 'Right', 'Submit', 'Exit', 'Pause')
@@ -75,6 +52,7 @@ class World(object):
 		new_world = json.loads(new_world)
 		#print("NEW WORLD:", new_world, type(new_world))
 		# Received: {"earth": {"x": 0.8, "y": 0.5, "r": 0.1}, "moon": {"x": 0.8, "y": 0.2, "r": 0.01}, "4ddad0457b7f419efb1c637937cbbeb3": {"x": 0.5, "y": 0.5, "vx": -0.1, "phi": 0.3, "tx": [0.55, 0.6, 0.65], "ty": [0.45, 0.4, 0.35]}}
+		# Received: {"earth": {"x": 0.7999914410604568, "y": 0.5056688065043662, "vx": 0.0, "vy": 0.0, "m": 1.0, "r": 0.1}, "moon": {"x": 1.7085589395431535, "y": -5.468806504366216, "vx": 0.1, "vy": 0.0, "m": 0.001, "r": 0.01}}
 		self.earth = self.decodeXYR(new_world.pop("earth"))
 		self.moon = self.decodeXYR(new_world.pop("moon"))
 		self.players.clear()

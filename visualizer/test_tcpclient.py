@@ -27,7 +27,7 @@ class TCPClient:
 async def do_stuff(loop):
     while True:
         print('doing stuff...')
-        await asyncio.sleep(2.5, loop=loop)
+        await asyncio.sleep(0.001, loop=loop)
 
 
 async def start(loop):
