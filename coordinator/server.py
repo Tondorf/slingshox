@@ -65,8 +65,8 @@ class GameServer(TCPServer):
 
         fs = self._forces
         for i in range(1000):
-            xs, vs, fs, _, _ = physics.integrate(xs, vs, fs, ms, 50 * dt)
-            if i % 10 == 0:
+            xs, vs, fs, _, _ = physics.integrate(xs, vs, fs, ms, 20 * dt)
+            if i % 2 == 0:
                 txs.append(xs)
 
         for i, p in enumerate(planets):
