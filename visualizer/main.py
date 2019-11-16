@@ -5,7 +5,7 @@ import sys
 
 from cozypygame import *
 from definitions import *
-from mode import Modes
+from visualizer import Visualizer
 from world import World
 from controls import EventProcessor
 
@@ -27,7 +27,7 @@ if FULLSCREEN:
 pygame.event.set_blocked(pygame.MOUSEMOTION)
 
 # initialize all the shit
-world = World(Modes.Game)
+world = World()
 
 ep = EventProcessor()
 world.ep = ep

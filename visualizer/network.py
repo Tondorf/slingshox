@@ -1,31 +1,38 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 *-*
 
 import json
-import socket
+import asyncio
 
-PORT = 4711
+PORT = 8888
 
 
 class Client:
-	def __init__(self, HOST='192.168.1.102'):
-		self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	def __init__(self, world, host='127.0.0.1'):
+		self.world = world
+		self.host = host
 
-	def connect(self) -> int:
-		self.sock.connect((HOST, PORT))
-		sid = self.sock.recv(1024)
-		print('Received', repr(sid))
-		try:
-			return int(sid)
-		except ValueError as ve:
-			# raise ve
-			return -1
+		self.event_loop = asyncio.get_event_loop()
+		self.event_loop.run_until_complete(self.handle(self.event_loop))
+		self.event_loop.close()
 
-	def recv_world(self):
-		wrld = self.sock.recv(1024)
-		return json.loads(wrld)
+	async def handle(self, loop):
+		self.reader, self.writer = await asyncio.open_connection(self.host, PORT, loop=loop)
 
-	def send_cmds(self, cmds):
+		running = True
+		while running:
+			data = await self.reader.readline()
+			if data:
+				new_message = data.decode().rstrip()
+				print('Received:', new_message)
+				await self.world.incoming_message(new_message)
+			else:
+				running = False
+
+		print('Close the socket')
+		self.writer.close()
+
+	async def send_cmds(self, cmds):
 		dat = json.dumps({"cmds": cmds}).encode("ascii")
-		self.sock.send(dat)
+		#self.sock.send(dat)
+		await self.writer.writelines(dat)
 		print('cmds sent', dat)
