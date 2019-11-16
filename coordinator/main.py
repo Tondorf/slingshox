@@ -3,6 +3,6 @@
 from server import GameServer
 
 if __name__ == '__main__':
-    fps = 1.
+    fps = 30.
     server = GameServer('127.0.0.1', 8888, fps=fps)
     server.start()

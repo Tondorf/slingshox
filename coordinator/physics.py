@@ -3,6 +3,7 @@ import numpy as np
 
 def get_forces(xs, ms):
     assert len(xs) == len(ms)
+    G = 9.79845085224335
 
     fs = []
     for x in xs:
@@ -11,7 +12,7 @@ def get_forces(xs, ms):
             r = x - u
             norm = np.linalg.norm(r)
             if norm > 1e-10:
-                f += r * m / norm ** 3
+                f -= G * r * m / norm ** 3
         fs.append(f)
 
     return np.array(fs)
