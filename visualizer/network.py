@@ -19,7 +19,7 @@ class Client:
 			data = await self.reader.readline()
 			if data:
 				new_message = data.decode().rstrip()
-				print('Received:', new_message)
+				# print('Received:', new_message)
 				self.world.incoming_message(new_message)
 			else:
 				running = False
@@ -29,5 +29,5 @@ class Client:
 
 	async def send_cmds(self, cmds):
 		dat = (json.dumps(cmds) + '\n').encode()
-		print('sending cmds', dat)
+		#print('sending cmds', dat)
 		self.writer.write(dat)

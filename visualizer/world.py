@@ -6,8 +6,8 @@ import threading
 import pygame
 
 from definitions import *
-from visualizer import Visualizer
 from entity import Thing, Player
+from visualizer import Visualizer
 
 
 class World(object):
@@ -60,7 +60,8 @@ class World(object):
 			self.players.clear()
 			for pID, pObj in new_world.items():
 				self.players[pID] = self.decodePlayer(pObj)
-			print(self.earth, self.moon, self.players)
+
+	# print(self.earth, self.moon, self.players)
 
 	@staticmethod
 	def decodeXYR(obj):
