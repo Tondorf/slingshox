@@ -11,7 +11,7 @@ class Client:
 		self.world = world
 		self.host = host
 
-	async def handle(self, loop):
+	async def start(self, loop):
 		self.reader, self.writer = await asyncio.open_connection(self.host, PORT, loop=loop)
 
 		running = True
@@ -28,7 +28,6 @@ class Client:
 		self.writer.close()
 
 	async def send_cmds(self, cmds):
-		dat = json.dumps({"cmds": cmds}).encode()
-		#self.sock.send(dat)
-		await self.writer.writelines(dat)
-		print('cmds sent', dat)
+		dat = (json.dumps(cmds) + '\n').encode()
+		print('sending cmds', dat)
+		self.writer.write(dat)

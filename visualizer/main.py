@@ -40,6 +40,7 @@ world.ep = ep
 
 async def main_game_loop(loop):
 	global tick
+
 	while world.running:  # main game loop
 
 		##############
@@ -55,6 +56,9 @@ async def main_game_loop(loop):
 			break
 
 		world.input(ep.get_menu_events(), ep.get_game_events())
+		if world.inited:
+			with world.cmds_mutex:
+				await network.send_cmds(world.cmds)
 
 		############
 		### TICK ###
@@ -77,7 +81,7 @@ async def main_game_loop(loop):
 
 
 async def start(loop):
-	tasks = [network.handle(loop), main_game_loop(loop)]
+	tasks = [network.start(loop), main_game_loop(loop)]
 	done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED, loop=loop)
 
 	for task in pending:
