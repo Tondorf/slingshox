@@ -31,7 +31,7 @@ class GameServer(TCPServer):
                 'x': .5,
                 'y': .5,
                 'vx': .1,
-                'vx': -.1,
+                'vy': -.1,
                 'phi': .3,
                 'tx': [.55, .6, .65],
                 'ty': [.45, .4, .35],
