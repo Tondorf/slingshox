@@ -6,7 +6,7 @@ import threading
 import pygame
 
 from definitions import *
-from entity import Thing, Player
+from entity import SpaceThing, Player
 from visualizer import Visualizer
 
 
@@ -53,28 +53,13 @@ class World(object):
 
 	def parse_new_world(self, new_world):
 		new_world = json.loads(new_world)
+		#print(new_world)
 		with self.world_objects_mutex:
-			self.earth = self.decodeXYR(new_world.pop("earth"))
-			self.moon = self.decodeXYR(new_world.pop("moon"))
-			# self.bombs = self.decodeBombs(new_world.pop("bombs"))  # TODO
+			self.earth = SpaceThing(new_world.pop("earth"))
+			self.moon = SpaceThing(new_world.pop("moon"))
+			# self.bombs = SpaceThing(new_world.pop("bombs"))  # TODO
 			self.players.clear()
 			for pID, pObj in new_world.items():
-				self.players[pID] = self.decodePlayer(pObj)
+				self.players[pID] = Player(pObj)
 
 	# print(self.earth, self.moon, self.players)
-
-	@staticmethod
-	def decodeXYR(obj):
-		return Thing(obj['x'], obj['y'], obj['r'])
-
-	@staticmethod
-	def decodeBombs(objs):
-		return [World.decodeXYR(obj) for obj in objs]
-
-	@staticmethod
-	def decodePlayer(obj):
-		pos = pygame.math.Vector2(obj['x'], obj['y'])
-		velocity = pygame.math.Vector2(obj['vx'], obj['vy'])
-		phi = obj['phi']
-		trajectories = list(zip(obj['tx'], obj['ty']))
-		return Player(pos, velocity, phi, trajectories)

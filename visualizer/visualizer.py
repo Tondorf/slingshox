@@ -2,7 +2,7 @@
 
 from cozypygame import *
 from definitions import *
-from entity import Thing
+from entity import SpaceThing
 
 
 class Visualizer:
@@ -30,10 +30,16 @@ class Visualizer:
 		return self.surf
 
 	def vis_earth(self, earth):
+		print("earth", earth)
 		pygame.draw.circle(self.surf, (0, 0, 100), (int(earth.x * XXX), int(earth.y * YYY)), int(earth.r*XXX))
+		for (x, y) in earth.tra:
+			pygame.draw.circle(self.surf, (0, 0, 100), (int(x * XXX), int(y * YYY)), 1)
 
 	def vis_moon(self, moon):
+		print("moon", moon)
 		pygame.draw.circle(self.surf, (200, 200, 200), (int(moon.x * XXX), int(moon.y * YYY)), int(moon.r*XXX))
+		for (x, y) in moon.tra:
+			pygame.draw.circle(self.surf, (200, 200, 200), (int(x * XXX), int(y * YYY)), 1)
 
 	def vis_player(self, player, me=False):
 		color = (255, 255, 0) if me else (0, 255, 0)

@@ -3,22 +3,26 @@
 import pygame
 
 
-class Thing(pygame.math.Vector2):
+class SpaceThing(pygame.math.Vector2):
 
-	def __init__(self, x, y, r):
-		super().__init__(x, y)
-		self.r = r
-
-	def __repr__(self):
-		return "Thing<%d,%d,r=%d>" % (self.x, self.y, self.r)
-
-
-class Player(Thing):
-	def __init__(self, pos, velocity, phi, trajectories):
-		super().__init__(pos.x, pos.y, 10)
-		self.vel = velocity
-		self.phi = phi
-		self.tra = trajectories
+	def __init__(self, obj):
+		super().__init__(obj['x'], obj['y'])
+		self.r = obj['r']
+		self.tra = list(zip(obj['tx'], obj['ty']))
 
 	def __repr__(self):
-		return "Player<%s,%s,phi=%d,tra_count=%d>" % (super().__repr__(), self.vel, self.phi, len(self.tra))
+		return "SpaceThing<%f,%f,r=%f,tra_count=%d>" % (self.x, self.y, self.r, len(self.tra))
+
+
+SpaceThing.__str__ = SpaceThing.__repr__
+
+
+class Player(SpaceThing):
+	def __init__(self, obj):
+		obj['r'] = 10
+		super().__init__(obj)
+		self.vel = pygame.math.Vector2(obj['vx'], obj['vy'])
+		self.phi = obj['phi']
+
+	def __repr__(self):
+		return "Player<%s,vel=%s,phi=%d>" % (super().__repr__(), self.vel, self.phi)
