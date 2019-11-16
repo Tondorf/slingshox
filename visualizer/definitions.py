@@ -8,8 +8,10 @@ FULLSCREEN = 0
 DEVEL = 1
 
 XXX = 1000
-YYY = XXX // 2
-dispYYY = int(YYY * (9/8))
+YYY = XXX
+
+dispXXX = int(XXX * 1.2)
+dispYYY = int(YYY)
 
 FPS = 30
 

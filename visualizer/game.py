@@ -15,7 +15,7 @@ class GameMode(Mode):
 		self.bigResultFont = pygame.font.Font("fonts/ARCADE_N.TTF", 80)
 		print("Called INGAME CHALLENGE MODE ctor")
 
-		self.surf = pygame.Surface((XXX, dispYYY))
+		self.surf = pygame.Surface((dispXXX, dispYYY))
 		self.canvas = load_image_cached("image/background.png")
 
 		# joystick control memory. this doesn't really belong here, but whatevs
@@ -36,9 +36,9 @@ class GameMode(Mode):
 		self.vis_ship(0.2, 0.2, True)
 		self.vis_ship(0.4, 0.7)
 		self.vis_ship(0.1, 0.9)
-		self.vis_ship(0.99, 0.9)
-		self.vis_ship(0.1, 0.99)
-		self.vis_ship(0.99, 0.99)
+		self.vis_ship(1, 0.9)
+		self.vis_ship(0.1, 1)
+		self.vis_ship(1, 1)
 
 		self.vis_footer()
 
@@ -49,4 +49,4 @@ class GameMode(Mode):
 		pygame.draw.circle(self.surf, color, (int(x * XXX), int(y * YYY)), 10)
 
 	def vis_footer(self):
-		pygame.draw.line(self.surf, (255, 255, 255), (0, YYY), (XXX, YYY), 1)
+		pygame.draw.line(self.surf, (255, 255, 255), (XXX, 0), (XXX, YYY), 1)
