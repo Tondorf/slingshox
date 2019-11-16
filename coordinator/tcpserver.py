@@ -6,15 +6,13 @@ import time
 
 
 class TCPServer:
-    def __init__(self, host, port):
+    def __init__(self, host, port, fps):
         self.host = host
         self.port = port
-        self._loop = asyncio.get_event_loop()
-        self._stopping = False
-
-    def start(self, fps):
         self.fps = fps
+        self._loop = asyncio.get_event_loop()
 
+    def start(self):
         coro = asyncio.start_server(self._handle_client, self.host, self.port)
         server = self._loop.run_until_complete(coro)
 
@@ -26,6 +24,9 @@ class TCPServer:
             self._loop.close()
 
     def _on_new_client(self, client_id):
+        raise NotImplementedError('not implemented in abstract base class')
+
+    def _on_leave_client(self, client_id):
         raise NotImplementedError('not implemented in abstract base class')
 
     def _on_client_message(self, message, client_id):
@@ -44,14 +45,15 @@ class TCPServer:
         tasks = [self._consumer_handler(reader), self._producer_handler(writer)]
         done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED, loop=self._loop)
 
-        self._stopping = True
+        self._on_leave_client(client_id)
+
         for task in pending:
             task.cancel()
 
         writer.close()
 
     async def _consumer_handler(self, reader):
-        while not self._stopping:
+        while True:
             data = await reader.readline()
             if data:
                 msg = data.decode().rstrip()
@@ -60,7 +62,7 @@ class TCPServer:
                 return
 
     async def _producer_handler(self, writer):
-        while not self._stopping:
+        while True:
             t1 = time.time()
             for msg in self._generate_broadcast_messages():
                 writer.write((msg + '\n').encode())

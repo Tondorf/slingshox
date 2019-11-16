@@ -7,9 +7,9 @@ from tcpserver import TCPServer
 
 
 class GameServer(TCPServer):
-    def __init__(self, host, port):
-        super(GameServer, self).__init__(host, port)
-        self.players = []
+    def __init__(self, host, port, fps):
+        super(GameServer, self).__init__(host, port, fps)
+        self.players = set()
 
         self.world = {
             'earth': {
@@ -41,10 +41,15 @@ class GameServer(TCPServer):
 
     def _on_new_client(self, client_id):
         print(f'New client: {client_id}')
-        self.players.append(client_id)
+        self.players.add(client_id)
+
+    def _on_leave_client(self, client_id):
+        print(f'Client has left: {client_id}')
+        self.players.add(client_id)
 
     def _on_client_message(self, message, client_id):
         print(f'Received from client {client_id}', message)
+        self.players.remove(client_id)
 
     def _update_world(self):
         planets = ['earth', 'moon']

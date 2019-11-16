@@ -4,9 +4,9 @@ import json
 
 import pygame
 
-from visualizer import Visualizer
 from definitions import *
 from network import Client
+from visualizer import Visualizer
 
 
 class Thing(pygame.math.Vector2):
@@ -69,9 +69,9 @@ class World(object):
 			self.pID = new_msg
 			self.inited = True
 		else:
-			await self.parse_new_world(new_msg)
+			self.parse_new_world(new_msg)
 
-	async def parse_new_world(self, new_world):
+	def parse_new_world(self, new_world):
 		new_world = json.loads(new_world)
 		#print("NEW WORLD:", new_world, type(new_world))
 		# Received: {"earth": {"x": 0.8, "y": 0.5, "r": 0.1}, "moon": {"x": 0.8, "y": 0.2, "r": 0.01}, "4ddad0457b7f419efb1c637937cbbeb3": {"x": 0.5, "y": 0.5, "vx": -0.1, "phi": 0.3, "tx": [0.55, 0.6, 0.65], "ty": [0.45, 0.4, 0.35]}}
