@@ -1,5 +1,6 @@
 # -*- coding: utf-8 *-*
 
+import sys
 import asyncio
 import json
 
@@ -7,7 +8,7 @@ PORT = 8888
 
 
 class Client:
-	def __init__(self, world, host='127.0.0.1'):
+	def __init__(self, world, host=sys.argv[1] if len(sys.argv) > 1 else '127.0.0.1'):
 		self.world = world
 		self.host = host
 
