@@ -15,10 +15,11 @@ pygame.mixer.pre_init(44100, -16, 2, 1024)
 pygame.init()
 pygame.joystick.init()
 pygame.display.set_caption('')
+print(XXX, dispYYY)
 if not FULLSCREEN:
-	display = pygame.display.set_mode((640, 480))
+	display = pygame.display.set_mode((XXX, dispYYY))
 else:
-	display = pygame.display.set_mode((640, 480), pygame.FULLSCREEN)
+	display = pygame.display.set_mode((XXX, dispYYY), pygame.FULLSCREEN)
 fpsClock = pygame.time.Clock()
 tick = 0
 

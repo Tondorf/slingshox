@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 *-*
 
-import itertools
-
+import pygame
 from mode import Mode
 from cozypygame import *
+from definitions import *
 
 
 class IngameMode(Mode):
@@ -16,9 +16,8 @@ class IngameMode(Mode):
 		self.bigResultFont = pygame.font.Font("fonts/ARCADE_N.TTF", 80)
 		print("Called INGAME CHALLENGE MODE ctor")
 
-		self.surf = pygame.Surface((640,480))
+		self.surf = pygame.Surface((XXX, dispYYY))
 		self.canvas = load_image_cached("image/background.png")
-		self.world.colorsurf = pygame.Surface((640,448), flags=pygame.SRCALPHA)
 
 		# joystick control memory. this doesn't really belong here, but whatevs
 		self.joy_dir = 0
@@ -33,6 +32,22 @@ class IngameMode(Mode):
 		pass
 
 	def visualize(self):
-		self.surf.blit(self.canvas, (0,0))
-		self.surf.blit(self.world.colorsurf, (0,0))
+		self.surf.fill((0, 0, 0))
+
+		self.vis_ship(0.2, 0.2, True)
+		self.vis_ship(0.4, 0.7)
+		self.vis_ship(0.1, 0.9)
+		self.vis_ship(0.99, 0.9)
+		self.vis_ship(0.1, 0.99)
+		self.vis_ship(0.99, 0.99)
+
+		self.vis_footer()
+
 		return self.surf
+
+	def vis_ship(self, x, y, me=False):
+		color = (255, 0, 0) if me else (0, 0, 255)
+		pygame.draw.circle(self.surf, color, (int(x * XXX), int(y * YYY)), 10)
+
+	def vis_footer(self):
+		pygame.draw.line(self.surf, (255, 255, 255), (0, YYY), (XXX, YYY), 1)
