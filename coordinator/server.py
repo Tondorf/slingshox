@@ -48,7 +48,15 @@ class GameServer(TCPServer):
         self._world.pop(client_id)
 
     def _on_client_message(self, message, client_id):
-        pass
+        dphi = message['direction'] * .1
+        self._world[client_id]['phi'] += dphi
+
+        R = np.array([[np.cos(dphi), np.sin(dphi)], [-np.sin(dphi), np.cos(dphi)]])
+        v = R @ np.array([self._world[client_id][i] for i in ['vx', 'vy']])
+        v += message['thrust'] * .1
+
+        self._world[client_id]['vx'] = v[0]
+        self._world[client_id]['vy'] = v[1]
 
     def _update_world(self):
         xs = [np.array([self._world[p]['x'], self._world[p]['y']]) for p in self._world]
