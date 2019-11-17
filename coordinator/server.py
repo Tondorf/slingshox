@@ -52,7 +52,7 @@ class GameServer(TCPServer):
 
         R = np.array([[np.cos(dphi), np.sin(dphi)], [-np.sin(dphi), np.cos(dphi)]])
         v = R @ np.array([self._world[client_id][i] for i in ['vx', 'vy']])
-        v += message['thrust'] * .1
+        v += v / np.linalg.norm(v) * message['thrust'] * .001
 
         self._world[client_id]['vx'] = v[0]
         self._world[client_id]['vy'] = v[1]
