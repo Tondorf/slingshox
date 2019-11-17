@@ -86,12 +86,12 @@ class EventProcessor:
 		if je.type == JOYHATMOTION:
 			pass
 		if je.type == JOYAXISMOTION:
-			if je.axis == 1:  # Cross Y=1: oben=-1 unten=1
+			if je.axis == SNES_AXIS_Y:  # Cross Y=1: oben=-1 unten=1
 				if je.value < 0:
 					menu_events.append(MenuEvent(EvAct.Up))
 				if je.value > 0:
 					menu_events.append(MenuEvent(EvAct.Down))
-			elif je.axis == 0:  # Cross X=0: links=-1 rechts=1
+			elif je.axis == SNES_AXIS_X:  # Cross X=0: links=-1 rechts=1
 				if je.value < 0:
 					menu_events.append(MenuEvent(EvAct.Left))
 				elif je.value > 0:
@@ -130,20 +130,29 @@ class EventProcessor:
 			return game_events
 
 		if je.type == JOYAXISMOTION:
-			if je.axis == 0:  # Cross X=0: links=-1 rechts=1
+			if je.axis == SNES_AXIS_X:  # Cross X=0: links=-1 rechts=1
 				if je.value == 0:  # this is like "Key up" but we don't know from which side (left/right) we came from
 					game_events = [ge for ge in game_events if ge.player != je.joy]
 				elif je.value < 0:
 					game_events.append(GameEvent(je.joy, EvAct.Left))
 				elif je.value > 0:
 					game_events.append(GameEvent(je.joy, EvAct.Right))
+
+		if je.type in [JOYBUTTONDOWN, JOYBUTTONUP]:
+			if je.button == SNES_A:
+				ge = GameEvent(je.joy, EvAct.Submit)
+				if je.type == JOYBUTTONDOWN:
+					game_events.append(ge)
+				elif je.type == JOYBUTTONUP and ge in game_events:
+					game_events.remove(ge)
+
 		return game_events
 
 	def process_new_events(self, rawEventList):
 		# reduce events to key strokes we care about
 		rawKeyEvents = [rke for rke in rawEventList if rke.type in [KEYDOWN, KEYUP] and rke.key in KEYS]
 		rawJoyEvents = [rje for rje in rawEventList if rje.type in [JOYBUTTONDOWN, JOYBUTTONUP, JOYAXISMOTION, JOYHATMOTION]]
-		rawJoyEvents = [rje for rje in rawJoyEvents if rje.type != JOYAXISMOTION or (rje.type == JOYAXISMOTION and abs(rje.value) > DEADZONE)]
+		# rawJoyEvents = [rje for rje in rawJoyEvents if rje.type != JOYAXISMOTION or (rje.type == JOYAXISMOTION and abs(rje.value) > DEADZONE)]
 
 		# TODO: if we have a HAT, drop all axis motions from that joystick and only user HAT events
 
