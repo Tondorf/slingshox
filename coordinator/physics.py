@@ -12,14 +12,17 @@ def get_forces(x, m):
         for j in range(i + 1, n):
             d[k] = G * (x[i] - x[j]) / np.linalg.norm(x[i] - x[j]) ** 3
             k = k + 1
-    d_idx = lambda i, j: j - (i ** 2 + 3 * i) // 2 + i * n - 1
+
+    def d_idx(i, j):
+        if i > j:
+            i, j = j, i
+        return j - (i ** 2 + 3 * i) // 2 + i * n - 1
 
     f = np.zeros((n, 2))
+    ones = np.ones((n, n))
+    sign = np.tril(ones).T - np.tril(ones)
     for i in range(0, n):
-        for j in range(0, n):
-            if i != j:
-                sign = +1. if i < j else -1.
-                f[i] += sign * m[j] * d[d_idx(i, j) if i < j else d_idx(j, i)]
+        f[i] = sum([sign[i, j] * m[j] * d[d_idx(i, j)] for j in range(0, n)])
 
     return f
 
