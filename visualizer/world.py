@@ -34,7 +34,7 @@ class World(object):
 		direction = int(EvAct.Right in events) - int(EvAct.Left in events)
 		thrust = int(EvAct.Submit in events)
 		with self.cmds_mutex:
-            self.cmds = {'direction': direction, 'thrust': thrust}
+			self.cmds = {'direction': direction, 'thrust': thrust}
 
 	def tick(self):
 		pass
