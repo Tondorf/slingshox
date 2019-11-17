@@ -41,12 +41,11 @@ class Visualizer:
 
 	def vis_player(self, player, me=False):
 		color = (255, 255, 0) if me else (0, 255, 0)
-		pygame.draw.circle(self.surf, color, (int(player.pos.x * XXX), int(player.pos.y * YYY)), 10)
-		for (x, y) in player.tra:
-			pygame.draw.circle(self.surf, color, (int(x * XXX), int(y * YYY)), 3)
+		pygame.draw.circle(self.surf, color, (int(player.x * XXX), int(player.y * YYY)), player.r)
+		pygame.draw.lines(self.surf, color, False, [(x*XXX, y*YYY) for (x, y) in player.tra])
 
 	def vis_bomb(self, bomb):
-		pygame.draw.circle(self.surf, (255, 0, 0), (int(bomb.pos.x * XXX), int(bomb.pos.y * YYY)), 10)
+		pygame.draw.circle(self.surf, (255, 0, 0), (int(bomb.x * XXX), int(bomb.y * YYY)), 10)
 
 	def vis_footer(self):
 		pygame.draw.line(self.surf, (255, 255, 255), (XXX, 0), (XXX, YYY), 1)
