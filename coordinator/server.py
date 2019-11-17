@@ -11,7 +11,6 @@ class GameServer(TCPServer):
         super(GameServer, self).__init__(host, port, fps)
         self._players = set()
 
-        self._forces = None
         self._world = {
             'earth': {
                 'x': .0,
@@ -65,7 +64,7 @@ class GameServer(TCPServer):
         dt = .01
 
         for _ in range(100):
-            xs, vs, self._forces, _, _ = physics.integrate(xs, vs, self._forces, ms, dt)
+            xs, vs = physics.integrate(xs, vs, ms, dt)
 
         for i, p in enumerate(self._world):
             x, y = xs[i]
@@ -76,14 +75,14 @@ class GameServer(TCPServer):
             self._world[p]['vx'] = vx
             self._world[p]['vy'] = vy
 
-        fs = self._forces
         txs = []
         for _ in range(100):
-            xs, vs, fs, _, _ = physics.integrate(xs, vs, fs, ms, dt)
+            xs, vs = physics.integrate(xs, vs, ms, dt)
         txs.append(xs)
 
+        # for i in range(100):
         for i in range(500):
-            xs, vs, fs, _, _ = physics.integrate(xs, vs, fs, ms, 100 * dt)
+            xs, vs = physics.integrate(xs, vs, ms, 100 * dt)
             txs.append(xs)
 
         for i, p in enumerate(self._world):

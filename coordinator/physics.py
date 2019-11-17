@@ -18,15 +18,32 @@ def get_forces(xs, ms):
     return np.array(fs)
 
 
-def integrate(xs, vs, fs, ms, dt):
-    assert len(xs) == len(vs) == len(ms)
-    assert dt > 0.
+def integrate(xs, vs, ms, dt):
+    assert len(xs) == len(vs)
 
-    if fs is None:
-        fs = get_forces(xs=xs, ms=ms)
+    w0 = -1.7024143839193153
+    w1 = 1.3512071919596578
+    c1 = w1 / 2.
+    c4 = w1 / 2.
+    c2 = (w0 + w1) / 2.
+    c3 = (w0 + w1) / 2.
+    d1 = w1
+    d3 = w1
+    d2 = w0
 
-    next_xs = [x + v * dt + a * dt ** 2 / 2. for x, v, a in zip(xs, vs, fs)]
-    next_fs = get_forces(xs=next_xs, ms=ms)
-    next_vs = [v + (a + next_a) * dt / 2. for v, a, next_a in zip(vs, fs, next_fs)]
+    x1 = [x + c1 * v * dt for x, v in zip(xs, vs)]
+    a1 = get_forces(xs=x1, ms=ms)
+    v1 = [v + d1 * a * dt for v, a in zip(vs, a1)]
 
-    return next_xs, next_vs, next_fs, ms, dt
+    x2 = [x + c2 * v * dt for x, v in zip(x1, v1)]
+    a2 = get_forces(xs=x2, ms=ms)
+    v2 = [v + d2 * a * dt for v, a in zip(v1, a2)]
+
+    x3 = [x + c3 * v * dt for x, v in zip(x2, v2)]
+    a3 = get_forces(xs=x3, ms=ms)
+    v3 = [v + d3 * a * dt for v, a in zip(v2, a3)]
+
+    x4 = [x + c4 * v * dt for x, v in zip(x3, v3)]
+    v4 = v3
+
+    return x4, v4
