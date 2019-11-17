@@ -3,8 +3,6 @@
 import json
 import threading
 
-import pygame
-
 from definitions import *
 from entity import SpaceThing, Player
 from visualizer import Visualizer
@@ -36,7 +34,7 @@ class World(object):
 		direction = int(EvAct.Right in events) - int(EvAct.Left in events)
 		thrust = int(EvAct.Submit in events)
 		with self.cmds_mutex:
-			self.cmds = {'client_id': self.pID, 'direction': direction, 'thrust': thrust}
+            self.cmds = {'direction': direction, 'thrust': thrust}
 
 	def tick(self):
 		pass
