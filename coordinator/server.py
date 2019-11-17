@@ -36,7 +36,7 @@ class GameServer(TCPServer):
         self._world[client_id] = {
             'x': 50,
             'y': 50.,
-            'vx': 0.,
+            'vx': -.2,
             'vy': 0.,
             'm': 0.,
             'phi': 0.,
@@ -74,10 +74,9 @@ class GameServer(TCPServer):
             xs, vs, fs, _, _ = physics.integrate(xs, vs, fs, ms, dt)
         txs.append(xs)
 
-        for i in range(1000):
-            xs, vs, fs, _, _ = physics.integrate(xs, vs, fs, ms, 20 * dt)
-            if i % 2 == 0:
-                txs.append(xs)
+        for i in range(500):
+            xs, vs, fs, _, _ = physics.integrate(xs, vs, fs, ms, 100 * dt)
+            txs.append(xs)
 
         for i, p in enumerate(self._world):
             self._world[p]['tx'] = np.array([t[i][0] for t in txs])

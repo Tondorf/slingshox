@@ -75,4 +75,6 @@ class TCPServer:
             t2 = time.time()
             dt = t2 - t1
             sleep_time = 1. / self.fps - dt
+            if sleep_time < 0:
+                print('WARNING: sleep time below threshold!')
             await asyncio.sleep(max(sleep_time, 0.), loop=self._loop)
