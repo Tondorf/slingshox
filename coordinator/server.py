@@ -47,7 +47,7 @@ class GameServer(TCPServer):
         self._world.pop(client_id)
 
     def _on_client_message(self, message, client_id):
-        dphi = message['direction'] * -.1
+        dphi = message['direction'] * -.01
         self._world[client_id]['phi'] += dphi
 
         R = np.array([[np.cos(dphi), np.sin(dphi)], [-np.sin(dphi), np.cos(dphi)]])
