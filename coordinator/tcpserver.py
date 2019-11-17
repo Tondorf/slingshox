@@ -55,7 +55,10 @@ class TCPServer:
 
     async def _consumer_handler(self, reader, client_id):
         while True:
-            data = await reader.readline()
+            try:
+                data = await reader.readline()
+            except ConnectionResetError:
+                return
             if data:
                 msg = data.decode().rstrip()
                 self._on_client_message(json.loads(msg), client_id)
