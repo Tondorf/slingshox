@@ -32,12 +32,21 @@ class GameServer(TCPServer):
         }
 
     def _on_new_client(self, client_id):
-        print(f'New client: {client_id}')
         self._players.add(client_id)
+        self._world[client_id] = {
+            'x': 50,
+            'y': 50.,
+            'vx': 0.,
+            'vy': 0.,
+            'm': 0.,
+            'r': 0.,
+            'phi': 0.,
+        }
 
     def _on_leave_client(self, client_id):
         print(f'Client has left: {client_id}')
         self._players.remove(client_id)
+        self._world.pop(client_id)
 
     def _on_client_message(self, message, client_id):
         pass
@@ -87,4 +96,8 @@ class GameServer(TCPServer):
                 'ty': (self._world[p]['ty'] / 100. + .2).tolist(),
             } for p in ['earth', 'moon']
         }
+
+        for p in self._players:
+            serialized_world[p] = self._world[p]
+
         return [json.dumps(serialized_world), ]
