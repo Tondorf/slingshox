@@ -39,7 +39,6 @@ class GameServer(TCPServer):
             'vx': 0.,
             'vy': 0.,
             'm': 0.,
-            'r': 0.,
             'phi': 0.,
         }
 
@@ -52,16 +51,15 @@ class GameServer(TCPServer):
         pass
 
     def _update_world(self):
-        planets = ['earth', 'moon']
-        xs = [np.array([self._world[p]['x'], self._world[p]['y']]) for p in planets]
-        vs = [np.array([self._world[p]['vx'], self._world[p]['vy']]) for p in planets]
-        ms = [self._world[p]['m'] for p in ['earth', 'moon']]
+        xs = [np.array([self._world[p]['x'], self._world[p]['y']]) for p in self._world]
+        vs = [np.array([self._world[p]['vx'], self._world[p]['vy']]) for p in self._world]
+        ms = [self._world[p]['m'] for p in self._world]
         dt = .01
 
         for _ in range(100):
             xs, vs, self._forces, _, _ = physics.integrate(xs, vs, self._forces, ms, dt)
 
-        for i, p in enumerate(planets):
+        for i, p in enumerate(self._world):
             x, y = xs[i]
             self._world[p]['x'] = x
             self._world[p]['y'] = y
@@ -81,7 +79,7 @@ class GameServer(TCPServer):
             if i % 2 == 0:
                 txs.append(xs)
 
-        for i, p in enumerate(planets):
+        for i, p in enumerate(self._world):
             self._world[p]['tx'] = np.array([t[i][0] for t in txs])
             self._world[p]['ty'] = np.array([t[i][1] for t in txs])
 
@@ -91,13 +89,17 @@ class GameServer(TCPServer):
             p: {
                 'x': self._world[p]['x'] / 100. + .5,
                 'y': self._world[p]['y'] / 100. + .2,
-                'r': self._world[p]['r'] / 100.,
+                'vx': self._world[p]['vx'] / 100.,
+                'vy': self._world[p]['vy'] / 100.,
                 'tx': (self._world[p]['tx'] / 100. + .5).tolist(),
                 'ty': (self._world[p]['ty'] / 100. + .2).tolist(),
-            } for p in ['earth', 'moon']
+            } for p in self._world
         }
 
-        for p in self._players:
-            serialized_world[p] = self._world[p]
+        for p in self._world:
+            if 'r' in self._world[p]:
+                serialized_world[p]['r'] = self._world[p]['r'] / 100
+            if 'phi' in self._world[p]:
+                serialized_world[p]['phi'] = self._world[p]['phi']
 
         return [json.dumps(serialized_world), ]
