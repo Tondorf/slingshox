@@ -58,9 +58,9 @@ class GameServer(TCPServer):
         self._world[client_id]['vy'] = v[1]
 
     def _update_world(self):
-        xs = [np.array([self._world[p]['x'], self._world[p]['y']]) for p in self._world]
-        vs = [np.array([self._world[p]['vx'], self._world[p]['vy']]) for p in self._world]
-        ms = [self._world[p]['m'] for p in self._world]
+        xs = np.array([[self._world[p]['x'], self._world[p]['y']] for p in self._world])
+        vs = np.array([[self._world[p]['vx'], self._world[p]['vy']] for p in self._world])
+        ms = np.array([self._world[p]['m'] for p in self._world])
         dt = .01
 
         for _ in range(100):
