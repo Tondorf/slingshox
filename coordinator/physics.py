@@ -1,26 +1,33 @@
 import numpy as np
 
 
-def get_forces(xs, ms):
-    assert len(xs) == len(ms)
-    G = 9.79845085224335
+def get_forces(x, m):
+    G = -9.79845085224335
 
-    fs = []
-    for x in xs:
-        f = 0.
-        for u, m in zip(xs, ms):
-            r = x - u
-            norm = np.linalg.norm(r)
-            if norm > 1e-10:
-                f -= G * r * m / norm ** 3
-        fs.append(f)
+    n, _ = x.shape
 
-    return np.array(fs)
+    d = np.zeros((n * (n - 1) // 2, 2))
+    k = 0
+    for i in range(0, n - 1):
+        for j in range(i + 1, n):
+            d[k] = G * (x[i] - x[j]) / np.linalg.norm(x[i] - x[j]) ** 3
+            k = k + 1
+
+    def d_idx(i, j):
+        if i > j:
+            i, j = j, i
+        return j - (i ** 2 + 3 * i) // 2 + i * n - 1
+
+    f = np.zeros((n, 2))
+    ones = np.ones((n, n))
+    sign = np.tril(ones).T - np.tril(ones)
+    for i in range(0, n):
+        f[i] = sum([sign[i, j] * m[j] * d[d_idx(i, j)] for j in range(0, n)])
+
+    return f
 
 
-def integrate(xs, vs, ms, dt):
-    assert len(xs) == len(vs)
-
+def integrate(x, v, m, dt):
     w0 = -1.7024143839193153
     w1 = 1.3512071919596578
     c1 = w1 / 2.
@@ -31,19 +38,19 @@ def integrate(xs, vs, ms, dt):
     d3 = w1
     d2 = w0
 
-    x1 = [x + c1 * v * dt for x, v in zip(xs, vs)]
-    a1 = get_forces(xs=x1, ms=ms)
-    v1 = [v + d1 * a * dt for v, a in zip(vs, a1)]
+    x1 = x + c1 * v * dt
+    a1 = get_forces(x=x1, m=m)
+    v1 = v + d1 * a1 * dt
 
-    x2 = [x + c2 * v * dt for x, v in zip(x1, v1)]
-    a2 = get_forces(xs=x2, ms=ms)
-    v2 = [v + d2 * a * dt for v, a in zip(v1, a2)]
+    x2 = x1 + c2 * v1 * dt
+    a2 = get_forces(x=x2, m=m)
+    v2 = v1 + d2 * a2 * dt
 
-    x3 = [x + c3 * v * dt for x, v in zip(x2, v2)]
-    a3 = get_forces(xs=x3, ms=ms)
-    v3 = [v + d3 * a * dt for v, a in zip(v2, a3)]
+    x3 = x2 + c3 * v2 * dt
+    a3 = get_forces(x=x3, m=m)
+    v3 = v2 + d3 * a3 * dt
 
-    x4 = [x + c4 * v * dt for x, v in zip(x3, v3)]
+    x4 = x3 + c4 * v3 * dt
     v4 = v3
 
     return x4, v4
