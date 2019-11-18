@@ -5,10 +5,11 @@ import pygame
 
 class SpaceThing(pygame.math.Vector2):
 
-	def __init__(self, obj):
+	def __init__(self, obj, color):
 		super().__init__(obj['x'], obj['y'])
 		self.r = obj['r']
 		self.tra = list(zip(obj['tx'], obj['ty']))
+		self.color = color
 
 	def __repr__(self):
 		return "SpaceThing<%f,%f,r=%f,tra_count=%d>" % (self.x, self.y, self.r, len(self.tra))
@@ -18,9 +19,9 @@ SpaceThing.__str__ = SpaceThing.__repr__
 
 
 class Player(SpaceThing):
-	def __init__(self, obj):
+	def __init__(self, obj, color):
 		obj['r'] = 10
-		super().__init__(obj)
+		super().__init__(obj, color)
 		self.vel = pygame.math.Vector2(obj['vx'], obj['vy'])
 		self.phi = obj['phi']
 

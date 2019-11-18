@@ -16,6 +16,7 @@ class World(object):
 		self.visualizer = Visualizer(self)
 
 		self.world_objects_mutex = threading.RLock()
+		self.last_update = 0
 		self.earth = None
 		self.moon = None
 		self.players = {}
@@ -53,11 +54,12 @@ class World(object):
 		new_world = json.loads(new_world)
 		#print(new_world)
 		with self.world_objects_mutex:
-			self.earth = SpaceThing(new_world.pop("earth"))
-			self.moon = SpaceThing(new_world.pop("moon"))
+			self.last_update = 0
+			self.earth = SpaceThing(new_world.pop("earth"), (0, 0, 100))
+			self.moon = SpaceThing(new_world.pop("moon"), (200, 200, 200))
 			# self.bombs = SpaceThing(new_world.pop("bombs"))  # TODO
 			self.players.clear()
 			for pID, pObj in new_world.items():
-				self.players[pID] = Player(pObj)
+				self.players[pID] = Player(pObj, (255, 255, 0) if pID == self.pID else (0, 255, 0))
 
 	# print(self.earth, self.moon, self.players)

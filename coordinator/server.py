@@ -80,8 +80,8 @@ class GameServer(TCPServer):
             xs, vs = physics.integrate(xs, vs, ms, dt)
         txs.append(xs)
 
-        # for i in range(100):
-        for i in range(500):
+        for i in range(100):
+        # for i in range(500):
             xs, vs = physics.integrate(xs, vs, ms, 100 * dt)
             txs.append(xs)
 
